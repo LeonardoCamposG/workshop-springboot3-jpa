@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,6 +28,10 @@ public class User implements Serializable {
 	private String	phone;
 	private	String	password;
 	
+	// Quando você faz uma requisição, no postman por exemplo, em um objeto de relação um para muitos
+	// se a requisição for feita do lado do um, ele não carrega o lado do muitos por padrão(lazy loading).
+	
+	@JsonIgnore		// Annotation para usar a biblioteca jackson, possibilitando consulta no DB na hora de serializar o JSON.
 	@OneToMany(mappedBy = "client")		// Annotation especificando o atributo que esta criando o relacionamento no DB na outra classe.
 	private List<Order> orders = new ArrayList<>();
 	

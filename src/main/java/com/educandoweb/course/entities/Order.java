@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +22,13 @@ public class Order implements Serializable {
 	@Id 		// Annotation que especifica a PK da tabela(Colocada acima do atributo).
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 	// Dizendo que vai ser uma PK com auto increment.
 	private Long id;
+	
+	// Annotation usada para formatar o Instant no json, passando o formato como parametro de String e a timezone a ser usada.
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant moment;
+		
+	// Quando você faz uma requisição, no postman por exemplo, em um objeto de relação muitos para um
+	// se a requisição for feita do lado do muitos, ele automaticamente traz no json o objeto de relação um também.
 	
 	@ManyToOne		// Annotation para especificar a coluna relacionamento entre as 2 classes no banco de dados(Muitos para um).
 	@JoinColumn(name = "client_id")		// Annotation para dar um alias na foreing key.
