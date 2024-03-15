@@ -1,28 +1,33 @@
 package com.educandoweb.course.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 //
 @Entity 					// Annotation para mapear o objeto relacional.
 @Table(name = "tb_user")	// Especificando o nome para a tabela no DB(user é uma palavra reservada no H2).
 public class User implements Serializable {
-	
 	private static final long serialVersionUID = 1L;
 	
 	@Id 		// Annotation que especifica a PK da tabela(Colocada acima do atributo).
-	@GeneratedValue(strategy = GenerationType.IDENTITY) // Dizendo que vai ser uma PK com auto increment.
+	@GeneratedValue(strategy = GenerationType.IDENTITY) 	// Dizendo que vai ser uma PK com auto increment.
 	private Long 	id;
 	private String	name;
 	private String	email;
 	private String	phone;
 	private	String	password;
+	
+	@OneToMany(mappedBy = "client")		// Annotation especificando o atributo que esta criando o relacionamento no DB na outra classe.
+	private List<Order> orders = new ArrayList<>();
 	
 	public User() {
 	}
@@ -74,6 +79,10 @@ public class User implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public List<Order> getOrders() {
+		return orders;
 	}
 
 	@Override
