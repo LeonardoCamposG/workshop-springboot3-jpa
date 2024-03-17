@@ -5,12 +5,17 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tb_product")
@@ -27,7 +32,17 @@ public class Product implements Serializable {
 	
 	// Usando Set para garantir que não aconteça a ocorrência de um mesmo produto na mesma categoria.
 	// Usando HashSet, pois só o set é uma INTERFACE, e não pode ser instanciado.
-	@Transient // Annotation que impede que o jpa interprete um atributo.
+	// @Transient // Annotation que impede que o jpa interprete um atributo.
+	
+	// O ANNOTATION A BAIXO FOI QUEBRADO EM VÁRIAS LINHAS PARA FICAR MENOS CONFUSO!!
+	
+	@ManyToMany	@Fetch(FetchMode.JOIN)	// Associação muitos para muitos. Esse fetch foi uma solução temporária.
+	// Com a annotation JoinTable, esta sendo criada uma tabela de associação para relação muitos para muitos.
+	@JoinTable(name = "tb_product_category", 
+	// no joinColumns, junto a annotation igual, precisamos passar a coluna que sera de referência para ESSA classe.
+	joinColumns = @JoinColumn(name = "product_id"),
+	// inverseJoinColumns é para definir a chave estrangeira da outra entidade.
+	inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private Set<Category> categories = new HashSet<>();	
 	
 	public Product() {
