@@ -2,17 +2,21 @@ package com.educandoweb.course.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import com.educandoweb.course.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity 					// Annotation para mapear o objeto relacional.
@@ -36,6 +40,10 @@ public class Order implements Serializable {
 	@ManyToOne		// Annotation para especificar a coluna relacionamento entre as 2 classes no banco de dados(Muitos para um).
 	@JoinColumn(name = "client_id")		// Annotation para dar um alias na foreing key.
 	private User client;
+	
+	
+	@OneToMany(mappedBy = "id.order", fetch = FetchType.EAGER)	// id.order para acessar a order entro do id da PK.
+	private Set<OrderItem> items = new HashSet<>();
 	
 	public Order() {
 	}
@@ -80,6 +88,10 @@ public class Order implements Serializable {
 
 	public void setClient(User client) {
 		this.client = client;
+	}
+	
+	public Set<OrderItem> getItems(){
+		return items;
 	}
 
 	@Override

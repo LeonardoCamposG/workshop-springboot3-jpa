@@ -26,6 +26,6 @@ public enum OrderStatus {
 				return value;				// Metodo que recebe como parametro o indice do enum, e retorna o valor dele.
 			}
 		}
-		throw new IllegalAccessException("Invalid OrderStatus code");
+		throw new IllegalArgumentException("Invalid OrderStatus code");
 	}
 }
