@@ -67,6 +67,10 @@ public class OrderItem implements Serializable {
 	public void setPrice(Double price) {
 		this.price = price;
 	}
+	
+	public Double getSubTotal() {	// Tem que colocar get, se não o json não considera o valor na hora de escrever.
+		return quantity * price;
+	}
 
 	@Override
 	public int hashCode() {
