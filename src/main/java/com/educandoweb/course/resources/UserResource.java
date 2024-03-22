@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,5 +53,13 @@ public class UserResource {
 				buildAndExpand(obj.getId()) // Ai preciso passar o id do obj que esta sendo inserido
 				.toUri();	// Convertendo para uri.
 		return ResponseEntity.created(uri).body(obj);	// Foi alterado para o request retornar 201(novo obj inserido).
+	}
+	
+	@DeleteMapping(value = "/{id}")	//	Annotation do spring usada para fazer a requisição delete do HTTP, recebendo id como parametro de caminho.
+	public ResponseEntity<Void> delete(@PathVariable Long id){
+		// PathVariable é usado para o Long id ser reconhecido como um ID no banco.
+		service.delete(id);
+		return ResponseEntity.
+				noContent().build();	// Vai retornar uma resposta vazia, e o codigo http com resposta vazia é o 204.
 	}
 }
