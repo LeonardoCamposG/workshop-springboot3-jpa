@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,5 +62,12 @@ public class UserResource {
 		service.delete(id);
 		return ResponseEntity.
 				noContent().build();	// Vai retornar uma resposta vazia, e o codigo http com resposta vazia é o 204.
+	}
+	
+	@PutMapping(value = "/{id}")	// Metodo PUT do HTTP, usado em requisições de alterações de dados.
+	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj){
+		// o PUT precisa receber como parametro o ID que sera atualizado, e um objeto contendo os dados a atualizar.
+		obj = service.update(id, obj);
+		return ResponseEntity.ok().body(obj);
 	}
 }

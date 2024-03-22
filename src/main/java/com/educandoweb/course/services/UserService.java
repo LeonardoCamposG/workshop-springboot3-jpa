@@ -34,4 +34,16 @@ public class UserService {
 	public void delete(Long id) {
 		repository.deleteById(id);	// Metodo para deletar usuario por id.
 	}
+	
+	public User update(Long id, User obj) {
+		User entity = findById(id); // repository.getReferenceById(id);	// Esse metodo ele prepara um objeto monitorado pelo jpa, para depois fazer interação com o DB.
+		updateData(entity, obj);
+		return repository.save(entity);	
+	}
+
+	private void updateData(User entity, User obj) {
+		entity.setName(obj.getName());
+		entity.setEmail(obj.getEmail());
+		entity.setPhone(obj.getPhone());
+	}
 }
