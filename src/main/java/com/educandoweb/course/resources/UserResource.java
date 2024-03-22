@@ -1,13 +1,17 @@
 package com.educandoweb.course.resources;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.educandoweb.course.entities.User;
 import com.educandoweb.course.services.UserService;
@@ -35,5 +39,18 @@ public class UserResource {
 		// Essa annotation @PathVariable, e para o spring conseguir passar o valor recebido na url para o parametro.
 		User obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
+	}
+	
+	@PostMapping // Annotation do spring usada para salvar dados no DB.
+	public ResponseEntity<User> insert(@RequestBody User obj){	// Ela faz um pré processamento no compilador, definindo que esse método vai receber o metodo POST do HTTP.
+		// Annotation RequestBody é para garantir que o json da requisição seja deseserializado para um obj do tipo User.
+		// Esse método retorna o obj inserido.
+		obj = service.insert(obj);
+		URI uri = ServletUriComponentsBuilder.
+				fromCurrentRequest()
+				.path("/{id}").	// Tem que passar o caminho da url resultante do obj, nesse caso é só o id.
+				buildAndExpand(obj.getId()) // Ai preciso passar o id do obj que esta sendo inserido
+				.toUri();	// Convertendo para uri.
+		return ResponseEntity.created(uri).body(obj);	// Foi alterado para o request retornar 201(novo obj inserido).
 	}
 }
